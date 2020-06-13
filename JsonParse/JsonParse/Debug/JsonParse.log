@@ -1,0 +1,3 @@
+﻿  JsonNode.cpp
+C:\Users\Legion\Desktop\GithubRepositories\JsonParse\JsonParse\JsonNode.cpp(119): warning C4715: 'JsonNode::validate': not all control paths return a value
+  JsonParse.vcxproj -> C:\Users\Legion\Desktop\GithubRepositories\JsonParse\Debug\JsonParse.exe
