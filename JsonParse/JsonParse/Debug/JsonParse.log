@@ -1,4 +1,6 @@
-﻿  JsonNode.cpp
-C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonNode.cpp(277,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonNode.cpp(159): warning C4715: 'JsonNode::validate': not all control paths return a value
+﻿  JsonParse.cpp
+C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonParse.cpp(69,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonParse.cpp(104,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonParse.cpp(108,11): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonParse.cpp(32): warning C4172: returning address of local variable or temporary: paths
   JsonParse.vcxproj -> C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\Debug\JsonParse.exe

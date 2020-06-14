@@ -1,7 +1,6 @@
 #include "JsonNode.h"
 #include <string>
 JsonNode::JsonNode() {
-	this->valueCount = 0;
 }
 
 JsonNode::JsonNode(const JsonNode& other) {
@@ -40,16 +39,23 @@ bool JsonNode::validate(std::string &text, int &counter)
 			throw "Invalid JSON. Every key must start with \"(string)";
 		}
 		counter++;
-		while (text[counter] != '\"')
+		int countKeyBrackers = 1;
+		int countBrackets = 1;
+		std::string currValue = "\"";
+		while (countBrackets != 2)
 		{
-			if (this->isNextSymbol(text ,counter, '\n'))
+			if (text[counter] == '\n')
 			{
 				throw "Invalid JSON. The key must end on the same row";
 			}
-			json.key += text[counter];
+			if (text[counter] == '\"')
+			{
+				countBrackets++;
+			}
+			currValue += text[counter];
 			counter++;
 		}
-		counter++;
+		json.key = currValue;
 		if (!this->isNextSymbol(text,counter, ':'))
 		{
 			throw "Invalid JSON. Every key must have \":\"(declaration) sign between it and its value";
@@ -80,59 +86,6 @@ bool JsonNode::validate(std::string &text, int &counter)
 		{
 			throw "Invalid value for the object";
 		}
-		/*if (this->isNextSymbol(text, counter, '['))
-		{
-			int counterForValue = 0;
-			counter++;
-			while (this->isNextSymbol(text ,counter, ']'))
-			{
-				if (this->isNextSymbol(text, counter, '\n'))
-				{
-					throw "Invalid JSON. The array of arguments must end on the same row";
-				}
-				while (this->isNextSymbol(text, counter, ',') && !this->isNextSymbol(text,counter, ']'))
-				{
-					this->value[counterForValue] += text[counter];
-					counter++;
-				}
-
-				if (text[counter] == ',' && this->isNextSymbol(text,counter, ']'))
-				{
-					throw "Invalid JSON. The last element of the array should not have coma after it";
-				}
-			}
-		}
-		if (this->isNextSymbol(text, counter, '\"'))
-		{
-			counter++;
-			while (text[counter] != '\"')
-			{
-				if (text[counter] == '\n')
-				{
-					throw "Invalid JSON. The key must end on the same row";
-				}
-				json.value += text[counter];
-				counter++;
-			}
-			counter++;
-		}
-		else if (text[counter] >= 48 && text[counter] <= 57)
-		{
-			while (text[counter] < 48 || text[counter] > 57)
-			{
-				if (this->isNextSymbol(text, counter, '\n'))
-				{
-					throw "Invalid JSON. The value is not valid";
-				}
-				json.value += text[counter];
-				counter++;
-			}
-			if (json.value.empty())
-			{
-				throw "Invalid JSON. The value is not valid";
-			}
-			counter++;
-		}*/
 		this->nodes.push_back(json);
 		if (this->isNextSymbol(text, counter, ','))
 		{
@@ -225,7 +178,7 @@ void JsonNode::GetNumber(std::string& text, int& counter, JsonNode& json)
 	std::string currValue;
 	while (text[counter] != ',')
 	{
-		if (text[counter] == '\n')
+		if (this->isNextSymbol(text, counter, '}'))
 		{
 			break;
 		}
@@ -286,4 +239,101 @@ bool JsonNode::CheckIfInt(std::string &input)
 		}
 	}
 	return true;
+}
+
+void JsonNode::Print(int spaces)
+{
+	if (this->key == "")
+	{
+		for (JsonNode node : this->nodes)
+		{
+			node.Print(spaces);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < spaces; i++)
+		{
+			std::cout << ' ';
+		}
+		std::cout << "Key: " << this->key;
+		if (this->value.size() == 0)
+		{
+			std::cout << '\n';
+			spaces++;
+			for (JsonNode node : this->nodes)
+			{
+				
+				node.Print(spaces);
+			}
+		}
+		spaces++;
+		if (this->value.size() == 1)
+		{
+			std::cout << ", Value: " << this->value[0] << std::endl;
+		}
+		else if (this->value.size() > 1)
+		{
+			std::cout <<'\n';
+			for (int i = 0; i < this->value.size(); i++)
+			{
+				std::cout << i << "." << this->value[i] << std::endl;
+			}
+		}
+	}
+}
+
+void JsonNode::ChangeValueAtKey(std::string& key, JsonNode &json)
+{
+
+}
+
+bool JsonNode::DoesKeyExist(std::string key, bool &doesExist)
+{
+
+	if (this->key != key)
+	{
+		if (this->nodes.size() > 0)
+		{
+			
+			for (JsonNode node : this->nodes) {
+				if (node.DoesKeyExist(key, doesExist))
+				{
+					return doesExist;
+				}
+			}
+		}
+	}
+	else
+	{
+		doesExist = true;
+		return doesExist;
+	}
+
+	return false;
+}
+
+JsonNode JsonNode::SearchKey(std::string jsonKey, JsonNode &json)
+{
+		if (this->key != jsonKey)
+		{
+			if (this->nodes.size() > 0)
+			{
+				for (int i = 0; i < this->nodes.size(); i++)
+				{
+					JsonNode temp;
+					temp = this->nodes[i].SearchKey(jsonKey, json);
+					if (temp.key == "")
+					{
+						continue;
+					}
+					json = temp;
+				}
+			}
+			return json;
+		}
+		else
+		{
+			return *this;
+		}
 }
