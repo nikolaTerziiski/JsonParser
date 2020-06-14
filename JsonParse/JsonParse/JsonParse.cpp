@@ -137,7 +137,20 @@ void Engine(JsonNode& json) {
 		}
 		else if (command == "delete")
 		{
-			
+			std::vector<std::string> paths;
+			paths = CalculatePaths(json);
+			for (int i = 0; i < paths.size(); i++)
+			{
+				bool doesExist = false;
+				if (!json.DoesKeyExist(paths[i], doesExist))
+				{
+					std::cout << "Invalid path!" << std::endl;
+					continue;
+				}
+			}
+
+			//Delete element...
+
 		}
 		else if (command == "move")
 		{
