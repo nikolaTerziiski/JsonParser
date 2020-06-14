@@ -18,12 +18,6 @@
     <ClCompile Include="JsonParse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Printer.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Printer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="JsonNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

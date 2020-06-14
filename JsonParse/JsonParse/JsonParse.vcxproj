@@ -149,8 +149,6 @@
   <ItemGroup>
     <ClCompile Include="JsonNode.cpp" />
     <ClCompile Include="JsonParse.cpp" />
-    <ClCompile Include="Printer.cpp" />
-    <ClCompile Include="Printer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="JsonFile.h" />

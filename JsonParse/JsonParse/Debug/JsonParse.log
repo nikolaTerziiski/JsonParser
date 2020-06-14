@@ -1,3 +1,4 @@
 ﻿  JsonNode.cpp
-C:\Users\Legion\Desktop\GithubRepositories\JsonParse\JsonParse\JsonNode.cpp(119): warning C4715: 'JsonNode::validate': not all control paths return a value
-  JsonParse.vcxproj -> C:\Users\Legion\Desktop\GithubRepositories\JsonParse\Debug\JsonParse.exe
+C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonNode.cpp(277,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonNode.cpp(159): warning C4715: 'JsonNode::validate': not all control paths return a value
+  JsonParse.vcxproj -> C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\Debug\JsonParse.exe
