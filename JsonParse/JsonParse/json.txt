@@ -1,6 +1,7 @@
 { 
-  "Inside": {
-	"Nikola" : 123
+  "Inside": { 
+     "Kolio" : [123, true, "Nope"],
+     "Nikito" : 123
 	},
   "Nikola" : 19
 }

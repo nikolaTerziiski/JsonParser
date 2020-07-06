@@ -1,6 +1,1 @@
-﻿  JsonParse.cpp
-C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonParse.cpp(69,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonParse.cpp(104,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonParse.cpp(108,11): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonParse.cpp(32): warning C4172: returning address of local variable or temporary: paths
-  JsonParse.vcxproj -> C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\Debug\JsonParse.exe
+﻿  JsonParse.vcxproj -> C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\Debug\JsonParse.exe

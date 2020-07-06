@@ -275,9 +275,14 @@ void JsonNode::Print(int spaces)
 		else if (this->value.size() > 1)
 		{
 			std::cout <<'\n';
+			int valueCounter = 1;
 			for (int i = 0; i < this->value.size(); i++)
 			{
-				std::cout << i << "." << this->value[i] << std::endl;
+				for (int i = 0; i < spaces; i++)
+				{
+					std::cout << ' ';
+				}
+				std::cout << valueCounter << "." << this->value[i] << std::endl;
 			}
 		}
 	}
@@ -288,7 +293,7 @@ void JsonNode::ChangeValueAtKey(std::string& key, JsonNode &json)
 
 }
 
-bool JsonNode::DoesKeyExist(std::string key, bool &doesExist)
+bool JsonNode::DoesKeyExist(std::string key)
 {
 
 	if (this->key != key)
@@ -297,43 +302,43 @@ bool JsonNode::DoesKeyExist(std::string key, bool &doesExist)
 		{
 			
 			for (JsonNode node : this->nodes) {
-				if (node.DoesKeyExist(key, doesExist))
+				if (!node.DoesKeyExist(key))
 				{
-					return doesExist;
+					continue;
+				}
+				else
+				{
+					return true;
 				}
 			}
 		}
 	}
 	else
 	{
-		doesExist = true;
-		return doesExist;
+		return true;
 	}
 
 	return false;
 }
 
-JsonNode JsonNode::SearchKey(std::string jsonKey, JsonNode &json)
+JsonNode& JsonNode::SearchKey(std::string jsonKey, JsonNode &json)
 {
-		if (this->key != jsonKey)
+	if (this->key != jsonKey)
+	{
+		if (this->nodes.size() > 0)
 		{
-			if (this->nodes.size() > 0)
-			{
-				for (int i = 0; i < this->nodes.size(); i++)
+			for (auto js : this->nodes) {
+				json = js.SearchKey(jsonKey, json);
+				if (json.key != "")
 				{
-					JsonNode temp;
-					temp = this->nodes[i].SearchKey(jsonKey, json);
-					if (temp.key == "")
-					{
-						continue;
-					}
-					json = temp;
+					return json;
 				}
 			}
-			return json;
 		}
-		else
-		{
-			return *this;
-		}
+		return json;
+	}
+	else
+	{
+		return *this;
+	}
 }

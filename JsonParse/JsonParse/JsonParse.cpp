@@ -31,7 +31,9 @@ std::vector<std::string>& CalculatePaths(JsonNode json) {
 
 	   return paths;
 }
-
+bool validePaths(std::vector<std::string>& paths) {
+	return false;
+}
 void Engine(JsonNode& json) {
 	std::string command;
 	do
@@ -48,12 +50,13 @@ void Engine(JsonNode& json) {
 			std::cin >> key;
 			JsonNode result;
 			bool doesExist = false;
-			if (json.DoesKeyExist(key, doesExist))
+			if (json.DoesKeyExist(key))
 			{
 				json.SearchKey(key, result);
 
 				//Returning values
 				std::cout << "Printing values:" << std::endl;
+				int spaces = 0;
 				result.Print(0);
 				continue;
 			}
@@ -68,8 +71,7 @@ void Engine(JsonNode& json) {
 
 			for (int i = 0; i < paths.size(); i++)
 			{
-				bool doesExist = false;
-				if (!json.DoesKeyExist(paths[i], doesExist))
+				if (!json.DoesKeyExist(paths[i]))
 				{
 					std::cout << "Invalid path!" << std::endl;
 					continue;
@@ -103,11 +105,10 @@ void Engine(JsonNode& json) {
 
 			for (int i = 0; i < paths.size(); i++)
 			{
-				bool doesExist = false;
 				//Proverka dali e posleden element. Ako e posleden i ima key => ima value => trqbva da grumne
 				if (i < paths.size() - 1)
 				{
-					if (!json.DoesKeyExist(paths[i], doesExist))
+					if (!json.DoesKeyExist(paths[i]))
 					{
 						std::cout << "Invalid path!" << std::endl;
 						continue;
@@ -115,7 +116,7 @@ void Engine(JsonNode& json) {
 				}
 				else
 				{
-					if (json.DoesKeyExist(paths[i], doesExist))
+					if (json.DoesKeyExist(paths[i]))
 					{
 						std::cout << "There is element on this path" << std::endl;
 						continue;
@@ -142,7 +143,7 @@ void Engine(JsonNode& json) {
 			for (int i = 0; i < paths.size(); i++)
 			{
 				bool doesExist = false;
-				if (!json.DoesKeyExist(paths[i], doesExist))
+				if (!json.DoesKeyExist(paths[i]))
 				{
 					std::cout << "Invalid path!" << std::endl;
 					continue;

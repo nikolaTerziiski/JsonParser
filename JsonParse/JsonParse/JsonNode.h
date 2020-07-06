@@ -23,8 +23,8 @@ public:
 	void GetBoolean(std::string& text, int& counter, JsonNode &json);
 
 	bool isNextSymbol(std::string& text, int& counter, char symbol);
-	bool DoesKeyExist(std::string key, bool &doesExist);
-	JsonNode SearchKey(std::string jsonKey, JsonNode &json);
+	bool DoesKeyExist(std::string key);
+	JsonNode& SearchKey(std::string jsonKey, JsonNode &json);
 
 
 	bool CheckIfInt(std::string& text);
