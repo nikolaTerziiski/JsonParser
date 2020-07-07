@@ -2,7 +2,9 @@
 #include <cstring>
 #include <fstream>
 #include "JsonNode.h"
-void CalculatePaths(JsonNode& json, std::vector<std::string>& path) {
+
+std::string openedFile;
+void CalculatePaths(std::vector<std::string>& path) {
 	   std::string input;
 	   std::cin >> input;
 	   
@@ -40,6 +42,41 @@ bool DoesInputIsValid(std::vector<std::string>& paths, JsonNode json, int size) 
 	}
 	return true;
 }
+void ReplaceKeyValue(std::string& keyToSearch, JsonNode& jsonToReplace, JsonNode& json)
+{
+	if (json.key == keyToSearch)
+	{
+		json.nodes = jsonToReplace.nodes;
+		json.value = std::vector<std::string>();
+	}
+	else
+	{
+		for (int i = 0; i < json.nodes.size(); i++)
+		{
+			ReplaceKeyValue(keyToSearch, jsonToReplace, json.nodes[i]);
+		}
+	}
+}
+void SaveInformation(JsonNode& json, std::string& pathToSave) {
+	std::vector<std::string> path;
+	CalculatePaths(path);
+
+	if (path.size() != 0)
+	{
+		if (!DoesInputIsValid(path, json, path.size()))
+		{
+			std::cout << "Invalid path!" << std::endl;
+			return;
+		}
+	}
+	else
+	{
+		//TODO - just save the file in the given file
+		std::ifstream in;
+		in.open(pathToSave, std::ios::out);
+		//Write the file down
+	}
+}
 void Engine(JsonNode& json) {
 	std::string command;
 	do
@@ -71,7 +108,7 @@ void Engine(JsonNode& json) {
 		else if (command == "set")
 		{
 			std::vector<std::string> path;
-			CalculatePaths(json, path);
+			CalculatePaths(path);
 
 			std::string newJsonString;
 			std::cin >> newJsonString;
@@ -89,7 +126,7 @@ void Engine(JsonNode& json) {
 				jsonToReplace.validate(newJsonString, counter);
 				jsonToReplace.isValid = true;
 
-				json.ReplaceKeyValue(path[path.size() - 1], jsonToReplace);
+				ReplaceKeyValue(path[path.size() - 1], jsonToReplace, json);
 			}
 			catch (const char* er)
 			{
@@ -103,75 +140,87 @@ void Engine(JsonNode& json) {
 		}
 		else if (command == "create")
 		{
-			
 			std::vector<std::string> path;
-			CalculatePaths(json, path);
+			CalculatePaths(path);
 
 			std::string newJsonString;
 			std::cin >> newJsonString;
 
-			for (int i = 0; i < path.size(); i++)
+			//Proverka za putq do predposledniq element
+			if (DoesInputIsValid(path,json, path.size() -1) && !DoesInputIsValid(path,json, path.size()))
 			{
-				//Proverka dali e posleden element. Ako e posleden i ima key => ima value => trqbva da grumne
-				if (i < path.size() - 1)
+				/*try
 				{
-					if (!json.DoesKeyExist(path[i]))
-					{
-						std::cout << "Invalid path!" << std::endl;
-						continue;
-					}
+					int counter = 0;
+					JsonNode jsonToCheck;
+					jsonToCheck.validate(newJsonString, counter);
+					jsonToCheck.isValid = true;
 				}
-				else
+				catch (const char* er)
 				{
-					if (json.DoesKeyExist(path[i]))
-					{
-						std::cout << "There is element on this path" << std::endl;
-						continue;
-					}
-				}
+					std::cout << "Invalid input! ";
+					std::cout << er << std::endl;
+				}*/
 			}
-			try
+			else
 			{
-				int counter = 0;
-				JsonNode jsonToCheck;
-				jsonToCheck.validate(newJsonString, counter);
-				jsonToCheck.isValid = true;
-			}
-			catch (const char* er)
-			{
-				std::cout << "Invalid input! ";
-				std::cout << er << std::endl;
+				std::cout << "Invalid path to object!" << std::endl;
+				std::cout << "The last path must not exists, so it can be created" << std::endl;
+				continue;
 			}
 		}
 		else if (command == "delete")
 		{
 			std::vector<std::string> path;
-			CalculatePaths(json, path);
+			CalculatePaths(path);
 
-			for (int i = 0; i < path.size(); i++)
+			std::string newJsonString;
+			std::cin >> newJsonString;
+
+			if (!DoesInputIsValid(path, json, path.size()))
 			{
-				bool doesExist = false;
-				if (!json.DoesKeyExist(path[i]))
-				{
-					std::cout << "Invalid path!" << std::endl;
-					continue;
-				}
+				std::cout << "Invalid path!" << std::endl;
+				continue;
 			}
-
-			//Delete element...
 
 		}
 		else if (command == "move")
 		{
+			std::vector<std::string> fromPath;
+			CalculatePaths(fromPath);
+
+			if (!DoesInputIsValid(fromPath, json, fromPath.size()))
+			{
+				std::cout << "Invalid path!" << std::endl;
+				continue;
+			}
+
+			std::vector<std::string> toPath;
+			CalculatePaths(toPath);
+
+			if (!DoesInputIsValid(toPath, json, toPath.size()))
+			{
+				std::cout << "Invalid path!" << std::endl;
+				continue;
+			}
+
+			JsonNode jsonToMove;
+			json.SearchKey(fromPath[fromPath.size() - 1], jsonToMove);
+
 
 		}
 		else if (command == "save" || command == "saveas")
 		{
 			if (command == "saveas")
 			{
-				//Da pazim elementa po daden string
+				std::string newDirectory;
+				std::cin >> newDirectory;
+				SaveInformation(json, newDirectory);
 			}
-			//Da pazim elementa po tekushtiq put
+			else
+			{
+				SaveInformation(json, openedFile);
+			}
 		}
 		else
 		{
@@ -193,10 +242,9 @@ int main()
 		else if (command == "open")
 		{
 			//Validating the json
-			std::string path;
-			std::cin >> path;
+			std::cin >> openedFile;
 			std::ifstream in;
-			in.open(path, std::ios::in);
+			in.open(openedFile, std::ios::in);
 			if (!in.is_open())
 			{
 				std::cout << "Invalid path! Try opening the file again."<<std::endl;

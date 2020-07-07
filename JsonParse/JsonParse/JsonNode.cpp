@@ -333,18 +333,3 @@ void JsonNode::SearchKey(std::string& jsonKey, JsonNode& temp)
 		}
 	}
 }
-
-void JsonNode::ReplaceKeyValue(std::string& key, JsonNode& jsonToReplace)
-{
-	if (this->key == key)
-	{
-		this->nodes.push_back(jsonToReplace.nodes[0]);
-		this->value = { "Nikola" };
-	}
-	else
-	{
-		for (auto js : this->nodes) {
-			js.ReplaceKeyValue(key, jsonToReplace);
-		}
-	}
-}

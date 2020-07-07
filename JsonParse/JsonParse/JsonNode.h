@@ -29,5 +29,4 @@ public:
 	bool CheckIfInt(std::string& text);
 	void Print(int spaces);
 
-	void ReplaceKeyValue(std::string& key, JsonNode& jsonToReplace);
 };
