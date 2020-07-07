@@ -26,17 +26,17 @@ void CalculatePaths(JsonNode& json, std::vector<std::string>& path) {
 	   }
 	   path.push_back(localPath);
 }
-bool DoesInputIsValid(std::vector<std::string>& paths, JsonNode& json, int size) {
-
-	JsonNode localJsonForSearch = json;
+bool DoesInputIsValid(std::vector<std::string>& paths, JsonNode json, int size) {
 	for (int i = 0; i < size; i++)
 	{
-		if (!localJsonForSearch.DoesKeyExist(paths[i]))
+		JsonNode tempInside;
+		if (!json.DoesKeyExist(paths[i]))
 		{
-			std::cout << "Invalid path!" << std::endl;
 			return false;
 		}
-		localJsonForSearch = localJsonForSearch.SearchKey(paths[i], localJsonForSearch);
+		json.SearchKey(paths[i], tempInside);
+
+		json = tempInside;
 	}
 	return true;
 }
@@ -54,7 +54,7 @@ void Engine(JsonNode& json) {
 		{
 			std::string key;
 			std::cin >> key;
-			JsonNode result;
+			JsonNode result = json;
 			bool doesExist = false;
 			if (json.DoesKeyExist(key))
 			{
@@ -85,9 +85,11 @@ void Engine(JsonNode& json) {
 			try
 			{
 				int counter = 0;
-				JsonNode jsonToCheck;
-				jsonToCheck.validate(newJsonString, counter);
-				jsonToCheck.isValid = true;
+				JsonNode jsonToReplace;
+				jsonToReplace.validate(newJsonString, counter);
+				jsonToReplace.isValid = true;
+
+				json.ReplaceKeyValue(path[path.size() - 1], jsonToReplace);
 			}
 			catch (const char* er)
 			{

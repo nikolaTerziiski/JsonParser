@@ -283,16 +283,11 @@ void JsonNode::Print(int spaces)
 					std::cout << ' ';
 				}
 				std::cout << valueCounter << "." << this->value[i] << std::endl;
+				valueCounter++;
 			}
 		}
 	}
 }
-
-void JsonNode::ChangeValueAtKey(std::string& key, JsonNode &json)
-{
-
-}
-
 bool JsonNode::DoesKeyExist(std::string key)
 {
 
@@ -321,23 +316,35 @@ bool JsonNode::DoesKeyExist(std::string key)
 	return false;
 }
 
-JsonNode& JsonNode::SearchKey(std::string jsonKey, JsonNode &json)
+void JsonNode::SearchKey(std::string& jsonKey, JsonNode& temp)
 {
-	if (this->key != jsonKey)
+	if (this->key == jsonKey)
 	{
-		if (this->nodes.size() > 0)
-		{
-			for (auto js : this->nodes) {
-				json = js.SearchKey(jsonKey, json);
-				if (json.key != "")
-				{
-					return json;
-				}
-			}
-		}
+		temp = *this;
 	}
 	else
 	{
-		return *this;
+		for (auto js : this->nodes) {
+			js.SearchKey(jsonKey, temp);
+			if (temp.key != "")
+			{
+				return;
+			}
+		}
+	}
+}
+
+void JsonNode::ReplaceKeyValue(std::string& key, JsonNode& jsonToReplace)
+{
+	if (this->key == key)
+	{
+		this->nodes.push_back(jsonToReplace.nodes[0]);
+		this->value = { "Nikola" };
+	}
+	else
+	{
+		for (auto js : this->nodes) {
+			js.ReplaceKeyValue(key, jsonToReplace);
+		}
 	}
 }

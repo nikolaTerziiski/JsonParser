@@ -24,11 +24,10 @@ public:
 
 	bool isNextSymbol(std::string& text, int& counter, char symbol);
 	bool DoesKeyExist(std::string key);
-	JsonNode& SearchKey(std::string jsonKey, JsonNode &json);
-
+	void SearchKey(std::string& jsonKey, JsonNode &json);
 
 	bool CheckIfInt(std::string& text);
 	void Print(int spaces);
 
-	void ChangeValueAtKey(std::string& key, JsonNode& json);
+	void ReplaceKeyValue(std::string& key, JsonNode& jsonToReplace);
 };
