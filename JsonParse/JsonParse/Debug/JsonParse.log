@@ -1,1 +1,5 @@
-﻿  JsonParse.vcxproj -> C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\Debug\JsonParse.exe
+﻿  JsonParse.cpp
+C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonParse.cpp(111,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonParse.cpp(114,11): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\JsonParse\JsonParse.cpp(149,22): warning C4018: '<': signed/unsigned mismatch
+  JsonParse.vcxproj -> C:\Users\Legion\Desktop\GithubRepositories\JsonParser\JsonParse\Debug\JsonParse.exe

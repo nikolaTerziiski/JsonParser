@@ -2,37 +2,43 @@
 #include <cstring>
 #include <fstream>
 #include "JsonNode.h"
-std::vector<std::string>& CalculatePaths(JsonNode json) {
-	   std::string path;
-	   std::cin >> path;
-	   std::vector <std::string> paths;
+void CalculatePaths(JsonNode& json, std::vector<std::string>& path) {
+	   std::string input;
+	   std::cin >> input;
 	   
-	   int wordsCounter = 0;
 	   int counter = 0;
 	   std::string localPath;
 	   
 	   //Taking every key. We can only search by keys
-	   while (path.length() != counter)
+	   while (input.length() != counter)
 	   {
-	   	if (path[counter] == '/')
+	   	if (input[counter] == '/')
 	   	{
-	   		paths.push_back(localPath);
+	   		path.push_back(localPath);
 	   		localPath = "";
 	   		counter++;
-	   		wordsCounter++;
 	   	}
 	   	else
 	   	{
-	   		localPath += path[counter];
+	   		localPath += input[counter];
 	   		counter++;
 	   	}
 	   }
-	   paths.push_back(localPath);
-
-	   return paths;
+	   path.push_back(localPath);
 }
-bool validePaths(std::vector<std::string>& paths) {
-	return false;
+bool DoesInputIsValid(std::vector<std::string>& paths, JsonNode& json, int size) {
+
+	JsonNode localJsonForSearch = json;
+	for (int i = 0; i < size; i++)
+	{
+		if (!localJsonForSearch.DoesKeyExist(paths[i]))
+		{
+			std::cout << "Invalid path!" << std::endl;
+			return false;
+		}
+		localJsonForSearch = localJsonForSearch.SearchKey(paths[i], localJsonForSearch);
+	}
+	return true;
 }
 void Engine(JsonNode& json) {
 	std::string command;
@@ -64,19 +70,18 @@ void Engine(JsonNode& json) {
 		}
 		else if (command == "set")
 		{
-			std::vector<std::string> paths;
+			std::vector<std::string> path;
+			CalculatePaths(json, path);
+
 			std::string newJsonString;
-			paths = CalculatePaths(json);
 			std::cin >> newJsonString;
 
-			for (int i = 0; i < paths.size(); i++)
+			if (!DoesInputIsValid(path,json, path.size()))
 			{
-				if (!json.DoesKeyExist(paths[i]))
-				{
-					std::cout << "Invalid path!" << std::endl;
-					continue;
-				}
+				std::cout << "Invalid path!" << std::endl;
+				continue;
 			}
+
 			try
 			{
 				int counter = 0;
@@ -89,7 +94,6 @@ void Engine(JsonNode& json) {
 				std::cout << "Invalid input! ";
 				std::cout << er << std::endl;
 			}
-
 		}
 		else if (command == "validate")
 		{
@@ -98,17 +102,18 @@ void Engine(JsonNode& json) {
 		else if (command == "create")
 		{
 			
-			std::vector<std::string> paths;
+			std::vector<std::string> path;
+			CalculatePaths(json, path);
+
 			std::string newJsonString;
-			paths = CalculatePaths(json);
 			std::cin >> newJsonString;
 
-			for (int i = 0; i < paths.size(); i++)
+			for (int i = 0; i < path.size(); i++)
 			{
 				//Proverka dali e posleden element. Ako e posleden i ima key => ima value => trqbva da grumne
-				if (i < paths.size() - 1)
+				if (i < path.size() - 1)
 				{
-					if (!json.DoesKeyExist(paths[i]))
+					if (!json.DoesKeyExist(path[i]))
 					{
 						std::cout << "Invalid path!" << std::endl;
 						continue;
@@ -116,7 +121,7 @@ void Engine(JsonNode& json) {
 				}
 				else
 				{
-					if (json.DoesKeyExist(paths[i]))
+					if (json.DoesKeyExist(path[i]))
 					{
 						std::cout << "There is element on this path" << std::endl;
 						continue;
@@ -138,12 +143,13 @@ void Engine(JsonNode& json) {
 		}
 		else if (command == "delete")
 		{
-			std::vector<std::string> paths;
-			paths = CalculatePaths(json);
-			for (int i = 0; i < paths.size(); i++)
+			std::vector<std::string> path;
+			CalculatePaths(json, path);
+
+			for (int i = 0; i < path.size(); i++)
 			{
 				bool doesExist = false;
-				if (!json.DoesKeyExist(paths[i]))
+				if (!json.DoesKeyExist(path[i]))
 				{
 					std::cout << "Invalid path!" << std::endl;
 					continue;

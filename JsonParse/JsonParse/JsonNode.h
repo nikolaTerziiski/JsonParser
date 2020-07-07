@@ -31,9 +31,4 @@ public:
 	void Print(int spaces);
 
 	void ChangeValueAtKey(std::string& key, JsonNode& json);
-
-
-
-
-private:
 };

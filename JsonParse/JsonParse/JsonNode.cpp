@@ -335,7 +335,6 @@ JsonNode& JsonNode::SearchKey(std::string jsonKey, JsonNode &json)
 				}
 			}
 		}
-		return json;
 	}
 	else
 	{
